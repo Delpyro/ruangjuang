@@ -45,7 +45,7 @@ class LoginForm extends Form
      * Ensure the authentication request is not rate limited.
      */
     protected function ensureIsNotRateLimited(): void
-    {
+    { 
         if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
             return;
         }

@@ -6,32 +6,15 @@
     --gradient-start: #29681E;
     --gradient-end: #E5B51F;
 
+    --primary: #29681E; /* Menggunakan warna hijau sebagai primary (ditarik dari gradient-start) */
+    --primary-dark: #1a4f15; /* Digunakan di bagian SKD dan Heading */
+
     /* Custom colors based on the image */
     --premium-color: #29681E;
     --ultimate-color: #A37C2C;
 }
 
-/* Perbaikan untuk loading screen dan gradien teks */
-.loading-title {
-    font-size: 3rem; /* text-5xl */
-    font-weight: 700; /* font-bold */
-    background: linear-gradient(135deg, var(--gradient-end), var(--gradient-start));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    color: transparent; /* fallback */
-    animation: fadein 0.5s forwards;
-}
-
-@keyframes fadein {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
+/* === UTILITY DAN GRADIENT BACKGROUNDS === */
 .gradient-bg {
     background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
 }
@@ -41,6 +24,7 @@
     box-shadow: 0 10px 25px -5px rgba(41, 104, 30, 0.4);
 }
 
+/* === HAMBURGER/MOBILE MENU === */
 .hamburger-line {
     transition: all 0.3s ease;
 }
@@ -66,81 +50,37 @@
     transform: translateX(0);
 }
 
-#loading-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #ffffff;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    opacity: 1;
-    transition: opacity 0.5s ease-in-out;
-}
+/* === PROMO CARD COLORS (Tailwind Overrides) === */
 
-#loading-screen.hidden {
-    opacity: 0;
-    pointer-events: none;
-}
-
-#progress-bar-container {
-    width: 250px;
-    height: 8px;
-    background-color: #e5e7eb;
-    border-radius: 9999px;
-    overflow: hidden;
-    margin-top: 2rem;
-}
-
-#progress-bar {
-    height: 100%;
-    width: 0;
-    background-color: var(--gradient-start);
-    transition: width 2s ease-in-out;
-}
-
-/* Custom CSS for promo card colors */
-.promo-card-premium {
-    border: 1px solid var(--premium-color);
-}
-
+/* Custom classes untuk tag di blade */
 .promo-tag-premium {
+    /* Background dan Warna Teks untuk Tag POPULER */
     background-color: var(--premium-color);
     color: white;
 }
-
 .promo-btn-premium {
     background-color: var(--premium-color);
     transition: background-color 0.3s ease;
 }
-
 .promo-btn-premium:hover {
     background-color: #1a4f15; /* A slightly darker green for hover effect */
 }
 
-.promo-card-ultimate {
-    border: 1px solid var(--ultimate-color);
-}
-
 .promo-tag-ultimate {
+    /* Background dan Warna Teks untuk Tag TERLARIS */
     background-color: var(--ultimate-color);
     color: white;
 }
-
 .promo-btn-ultimate {
     background-color: var(--ultimate-color);
     transition: background-color 0.3s ease;
 }
-
 .promo-btn-ultimate:hover {
     background-color: #725624; /* A slightly darker brown for hover effect */
 }
 
-/* Custom CSS untuk memposisikan gambar */
+
+/* === CUSTOM STYLES & SCROLLBAR === */
 .image-focus-top {
     object-position: 50% 90%;
 }
@@ -148,8 +88,57 @@
 .no-scrollbar::-webkit-scrollbar {
     display: none;
 }
-
 .no-scrollbar {
     -ms-overflow-style: none;  /* IE dan Edge */
     scrollbar-width: none;  /* Firefox */
+}
+
+
+/* === SPLASH SCREEN ANIMATIONS === */
+
+/* Class yang ditambahkan di <body> untuk mencegah scroll saat loading */
+.loading-active { 
+    overflow: hidden; 
+} 
+
+/* Animasi Progress Bar (Hanya Geser 0% ke 100%) */
+@keyframes loading-animation {
+    0% { width: 0%; opacity: 1; }
+    100% { width: 100%; opacity: 1; } 
+}
+
+/* Animasi Teks/Judul (Berdenyut) */
+@keyframes text-pulse {
+    from { opacity: 0.7; transform: scale(0.98); }
+    to { opacity: 1.0; transform: scale(1.0); }
+}
+
+
+/* === DROPDOWN & FAQ ANIMATION === */
+
+#dropdown-menu {
+    transition: all 0.3s ease;
+}
+
+#dropdown-menu:not(.hidden) {
+    animation: dropdownFade 0.3s ease;
+}
+
+@keyframes dropdownFade {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fa-chevron-down {
+    transition: transform 0.2s ease-in-out;
+}
+
+.fa-rotate-180 {
+    transform: rotate(180deg);
 }

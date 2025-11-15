@@ -4,6 +4,7 @@ export default {
         "./resources/**/*.blade.php",
         "./resources/**/*.js",
         "./resources/**/*.vue",
+        "./app/Livewire/**/*.php", 
     ],
     theme: {
         extend: {
@@ -16,6 +17,9 @@ export default {
                 accent: {
                     DEFAULT: '#E5B51F',
                 },
+                'ragu-ragu': '#F9A825', 
+                'answered': '#43A047', 
+                'timer-blue': '#2563EA', // WARNA BARU UNTUK TIMER
             },
             fontFamily: {
                 poppins: ['Poppins', 'sans-serif'],
@@ -53,15 +57,18 @@ export default {
                 gradient: {
                     '0%, 100%': {
                         'background-size': '200% 200%',
-                        'background-position': 'left center'
+                        'background-position': 'left center',
                     },
                     '50%': {
                         'background-size': '200% 200%',
-                        'background-position': 'right center'
-                    }
-                }
-            }
+                        'background-position': 'right center',
+                    },
+                },
+            },
         },
     },
-    plugins: [],
+
+    plugins: [
+        require('@tailwindcss/typography'),
+    ],
 };

@@ -6,9 +6,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title; // <-- TAMBAHKAN BARIS INI
 use Livewire\Volt\Component;
 
-new #[Layout('layouts.guest', ['vite_assets' => ['resources/css/auth/register.css', 'resources/js/auth/register.js']])] class extends Component
+new #[Layout('layouts.guest', ['vite_assets' => ['resources/css/auth.css', 'resources/js/auth/register.js']])]
+#[Title('Buat Akun')] // <-- TAMBAHKAN BARIS INI
+class extends Component
 {
     public string $name = '';
     public string $email = '';
@@ -16,9 +19,6 @@ new #[Layout('layouts.guest', ['vite_assets' => ['resources/css/auth/register.cs
     public string $password = '';
     public string $password_confirmation = '';
 
-    /**
-     * Handle an incoming registration request.
-     */
     public function register(): void
     {
         $validated = $this->validate([
@@ -30,7 +30,6 @@ new #[Layout('layouts.guest', ['vite_assets' => ['resources/css/auth/register.cs
 
         $validated['password'] = Hash::make($validated['password']);
         
-        // Generate slug dari name
         $validated['slug'] = \Illuminate\Support\Str::slug($validated['name']);
 
         event(new Registered($user = User::create($validated)));
@@ -47,7 +46,6 @@ new #[Layout('layouts.guest', ['vite_assets' => ['resources/css/auth/register.cs
     <form wire:submit="register" class="space-y-4">
         <div class="space-y-1">
             <label class="block text-gray-700 font-medium text-sm" for="name">
-                {{-- Perbaikan: Ubah 'mr-1' menjadi 'mr-2' --}}
                 <i class="fas fa-user text-primary-light mr-2"></i>Nama Lengkap
             </label>
             <div class="relative">
@@ -67,7 +65,6 @@ new #[Layout('layouts.guest', ['vite_assets' => ['resources/css/auth/register.cs
 
         <div class="space-y-1">
             <label class="block text-gray-700 font-medium text-sm" for="email">
-                {{-- Perbaikan: Ubah 'mr-1' menjadi 'mr-2' --}}
                 <i class="fas fa-envelope text-primary-light mr-2"></i>Email
             </label>
             <div class="relative">
@@ -86,7 +83,6 @@ new #[Layout('layouts.guest', ['vite_assets' => ['resources/css/auth/register.cs
 
         <div class="space-y-1">
             <label class="block text-gray-700 font-medium text-sm" for="phone_number">
-                {{-- Perbaikan: Ubah 'mr-1' menjadi 'mr-2' --}}
                 <i class="fas fa-phone text-primary-light mr-2"></i>Nomor HP
             </label>
             <div class="relative">
@@ -104,7 +100,6 @@ new #[Layout('layouts.guest', ['vite_assets' => ['resources/css/auth/register.cs
         
         <div class="space-y-1">
             <label class="block text-gray-700 font-medium text-sm" for="password">
-                {{-- Perbaikan: Ubah 'mr-1' menjadi 'mr-2' --}}
                 <i class="fas fa-lock text-primary-light mr-2"></i>Password
             </label>
             <div class="relative">
@@ -126,7 +121,6 @@ new #[Layout('layouts.guest', ['vite_assets' => ['resources/css/auth/register.cs
 
         <div class="space-y-1">
             <label class="block text-gray-700 font-medium text-sm" for="password_confirmation">
-                {{-- Perbaikan: Ubah 'mr-1' menjadi 'mr-2' --}}
                 <i class="fas fa-lock text-primary-light mr-2"></i>Konfirmasi Password
             </label>
             <div class="relative">

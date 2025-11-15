@@ -8,9 +8,12 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
+use Livewire\Attributes\Title; // <-- 1. TAMBAHKAN BARIS INI
 use Livewire\Volt\Component;
 
-new #[Layout('layouts.guest', ['vite_assets' => ['resources/css/auth/new-password.css', 'resources/js/auth/new-password.js']])] class extends Component
+new #[Layout('layouts.guest', ['vite_assets' => ['resources/css/auth.css', 'resources/js/auth/new-password.js']])]
+#[Title('Reset Password')] // <-- 2. TAMBAHKAN BARIS INI
+class extends Component
 {
     #[Locked]
     public string $token = '';
@@ -18,9 +21,6 @@ new #[Layout('layouts.guest', ['vite_assets' => ['resources/css/auth/new-passwor
     public string $password = '';
     public string $password_confirmation = '';
 
-    /**
-     * Mount the component.
-     */
     public function mount(string $token): void
     {
         $this->token = $token;
@@ -28,9 +28,6 @@ new #[Layout('layouts.guest', ['vite_assets' => ['resources/css/auth/new-passwor
         $this->email = request()->string('email');
     }
 
-    /**
-     * Reset the password for the given user.
-     */
     public function resetPassword(): void
     {
         $this->validate([
@@ -39,9 +36,6 @@ new #[Layout('layouts.guest', ['vite_assets' => ['resources/css/auth/new-passwor
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        // Here we will attempt to reset the user's password. If it is successful we
-        // will update the password on an actual user model and persist it to the
-        // database. Otherwise we will parse the error and return the response.
         $status = Password::reset(
             $this->only('email', 'password', 'password_confirmation', 'token'),
             function ($user) {
@@ -54,9 +48,6 @@ new #[Layout('layouts.guest', ['vite_assets' => ['resources/css/auth/new-passwor
             }
         );
 
-        // If the password was successfully reset, we will redirect the user back to
-        // the application's home authenticated view. If there is an error we can
-        // redirect them back to where they came from with their error message.
         if ($status != Password::PASSWORD_RESET) {
             $this->addError('email', __($status));
 
@@ -76,6 +67,7 @@ new #[Layout('layouts.guest', ['vite_assets' => ['resources/css/auth/new-passwor
     <x-auth-session-status class="mb-4 p-4 bg-green-100 text-green-700 rounded-lg border border-green-200" :status="session('status')" />
 
     <form wire:submit="resetPassword" class="space-y-6">
+        {{-- Input Email --}}
         <div class="space-y-2">
             <label class="block text-gray-700 font-medium" for="email">
                 <i class="fas fa-envelope text-primary-light mr-2"></i>Email
@@ -86,17 +78,16 @@ new #[Layout('layouts.guest', ['vite_assets' => ['resources/css/auth/new-passwor
                     id="email" 
                     type="email" 
                     placeholder="Masukkan alamat email" 
-                    {{-- Hapus padding kiri (pl-10) --}}
                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-light transition duration-300"
                     required
                     autofocus
                     autocomplete="username"
                 />
-                {{-- Hapus elemen <i> ikon --}}
             </div>
             <x-input-error :messages="$errors->get('email')" class="mt-2 text-sm" />
         </div>
 
+        {{-- Input Password Baru (DENGAN TOMBOL TOGGLE) --}}
         <div class="space-y-2">
             <label class="block text-gray-700 font-medium" for="password">
                 <i class="fas fa-lock text-primary-light mr-2"></i>Password
@@ -107,16 +98,19 @@ new #[Layout('layouts.guest', ['vite_assets' => ['resources/css/auth/new-passwor
                     id="password" 
                     type="password" 
                     placeholder="Buat kata sandi baru"
-                    {{-- Hapus padding kiri (pl-10) --}}
                     class="w-full px-4 py-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-light transition duration-300"
                     required
                     autocomplete="new-password" 
                 />
-                {{-- Hapus elemen <i> ikon --}}
+                {{-- TOMBOL TOGGLE DITAMBAHKAN DENGAN ID YANG SESUAI JS --}}
+                <button type="button" id="togglePassword" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-eye"></i>
+                </button>
             </div>
             <x-input-error :messages="$errors->get('password')" class="mt-2 text-sm" />
         </div>
 
+        {{-- Input Konfirmasi Password (DENGAN TOMBOL TOGGLE) --}}
         <div class="space-y-2">
             <label class="block text-gray-700 font-medium" for="password_confirmation">
                 <i class="fas fa-lock text-primary-light mr-2"></i>Konfirmasi Password
@@ -127,12 +121,14 @@ new #[Layout('layouts.guest', ['vite_assets' => ['resources/css/auth/new-passwor
                     id="password_confirmation" 
                     type="password" 
                     placeholder="Ketik ulang kata sandi baru" 
-                    {{-- Hapus padding kiri (pl-10) --}}
                     class="w-full px-4 py-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-light transition duration-300"
                     required
                     autocomplete="new-password"
                 />
-                {{-- Hapus elemen <i> ikon --}}
+                {{-- TOMBOL TOGGLE DITAMBAHKAN DENGAN ID YANG SESUAI JS --}}
+                <button type="button" id="togglePasswordConfirmation" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-eye"></i>
+                </button>
             </div>
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2 text-sm" />
         </div>
